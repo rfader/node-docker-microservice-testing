@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  auth_service:
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    command: yarn run start
+    environment:
+      PORT: 3001
+    ports:
+      - "3001:3001"
+
+
+# Users service
+
+  users_service:
+    build:
+      context: ./users-service
+      dockerfile: Dockerfile
+    command: /bin/sh -c "while ! nc -z users_mysql 3306; do sleep 1; done && yarn run start"
+    environment:
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    links:
+      - auth_service
+      - users_mysql
+    depends_on:
+      - auth_service
+      - users_mysql
+
+  users_mysql:
+    image: mysql:5.7
+    command: [mysqld, --character-set-server=utf8mb4, --collation-server=utf8mb4_unicode_ci]
+    environment:
+      MYSQL_ROOT_PASSWORD: root-password
+      MYSQL_DATABASE: database_development
