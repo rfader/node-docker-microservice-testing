@@ -1,9 +1,11 @@
 const request = require('request');
 
+const uri = process.env.NODE_ENV === 'test' ? 'http://localhost:3001' : 'http://auth_service:3001';
+
 module.exports = (connection) => {
     return (req, res) => {
         request.get({
-            url: 'http://auth_service:3001/auth',
+            url: `${uri}/auth`,
             headers: {
                 Authorization: req.get('Authorization')
             }

@@ -2,7 +2,7 @@ const expect = require('chai').expect;
 const sinon = require('sinon');
 const request = require('request');
 
-const users = require('../users');
+const users = require('../../users');
 
 const sandbox = sinon.sandbox.create();
 

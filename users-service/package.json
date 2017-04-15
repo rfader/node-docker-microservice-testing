@@ -6,7 +6,9 @@
     "main": "index.js",
     "scripts": {
         "start": "node index.js",
-        "test": "mocha",
+        "test": "npm run test:unit",
+        "test:unit": "mocha ./test/unit/",
+        "test:integration": "mocha ./test/integration/",
         "check": "npm outdated --depth 0"
     },
     "dependencies": {

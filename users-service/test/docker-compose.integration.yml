@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  users_test:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    command: /bin/sh -c "while ! nc -z users_mysql 3306; do sleep 1; done && yarn run test:integration"
+    environment:
+      NODE_ENV: test
+      PORT: 3000
+    volumes:
+    - ..:/usr/src/app
+    links:
+    - users_mysql
+    depends_on:
+    - users_mysql
+
+  users_mysql:
+    image: mysql:5.7
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: root-password
+      MYSQL_DATABASE: database_development
+
+networks:
+  default:
+    internal: true

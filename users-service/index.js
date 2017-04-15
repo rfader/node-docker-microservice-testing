@@ -1,8 +1,8 @@
 const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
-const mysql = require('mysql');
 
+const db = require('./db');
 const users = require('./users');
 
 const config = {
@@ -16,7 +16,7 @@ const config = {
     }
 };
 
-const connection = mysql.createConnection(config.db);
+const connection = db(config.db);
 
 connection.query([
     'CREATE TEMPORARY TABLE users (',
