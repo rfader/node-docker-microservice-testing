@@ -2,33 +2,38 @@ version: '3'
 
 services:
 
+# Functional tests
+
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: /bin/sh -c "while ! nc -z users_service 3000; do sleep 1; done && yarn run start"
+    volumes:
+    - .:/usr/src/app
+    depends_on:
+      - users_service
+
 # Auth service
 
   auth_service:
     build:
-      context: ./auth-service
+      context: ../auth-service
       dockerfile: Dockerfile
     command: yarn run start
     environment:
       PORT: 3001
-    ports:
-      - "3001:3001"
 
 
 # Users service
 
   users_service:
     build:
-      context: ./users-service
+      context: ../users-service
       dockerfile: Dockerfile
     command: /bin/sh -c "while ! nc -z users_mysql 3306; do sleep 1; done && yarn run start"
     environment:
       PORT: 3000
-    ports:
-      - "3000:3000"
-    links:
-      - auth_service
-      - users_mysql
     depends_on:
       - auth_service
       - users_mysql

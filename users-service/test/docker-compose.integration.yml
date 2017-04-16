@@ -5,7 +5,7 @@ services:
     build:
       context: ..
       dockerfile: Dockerfile
-    command: /bin/sh -c "while ! nc -z users_mysql 3306; do sleep 1; done && yarn run test:integration"
+    command: /bin/sh -c "while ! nc -z users_mysql 3306; do sleep 1; done && ./node_modules/.bin/mocha ./test/integration/"
     environment:
       NODE_ENV: test
       PORT: 3000
